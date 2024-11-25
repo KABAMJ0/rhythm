@@ -160,29 +160,42 @@
         const keyPressed = event.key;
         const notes = document.querySelectorAll(`.note[data-key="${keyPressed}"]`);
 
-        if (notes.length > 0) {
-            notes.forEach(note => {
-                const noteTop = note.getBoundingClientRect().top;
-                const hitZone = document.querySelector(`.hit-zone[data-key="${keyPressed}"]`);
-                const hitZoneTop = hitZone.getBoundingClientRect().top;
+       if (notes.length > 0) {
+    let noteHit = false; // Flag to check if any note was hit
 
-                if (noteTop >= hitZoneTop - 60 && noteTop <= hitZoneTop + 60) {
-                    note.remove()
-                    note.classList.add('hit');
-                    note.classList.add('confetti');// Mark the note as hit
-                    updateScore(100);
-                    showHitText();
-                    combo += 1;
-                    comboElement.textContent = `Combo: ${combo}`;  // Trigger confetti
-                    pingSound.play(); // Play ping sound when the note is hit
-                }
-            });
-        } else {
-            combo = 0;
-            comboElement.textContent = `Combo: ${combo}`;
-            updateScore(-100)
-            showMissText()
+    notes.forEach(note => {
+        const noteTop = note.getBoundingClientRect().top;
+        const hitZone = document.querySelector(`.hit-zone[data-key="${keyPressed}"]`);
+        const hitZoneTop = hitZone.getBoundingClientRect().top;
+
+        if (noteTop >= hitZoneTop - 60 && noteTop <= hitZoneTop + 60) {
+            // If the note is within the hit range
+            note.remove();
+            note.classList.add('hit');
+            note.classList.add('confetti'); // Mark the note as hit
+            updateScore(100);
+            showHitText();
+            combo += 1;
+            comboElement.textContent = `Combo: ${combo}`; // Update combo
+            pingSound.play(); // Play ping sound when the note is hit
+            noteHit = true; // Note was hit successfully
         }
+    });
+
+    if (!noteHit) {
+        // If no notes were hit in this row, count as a miss
+        combo = 0;
+        comboElement.textContent = `Combo: ${combo}`;
+        updateScore(-100);
+        showMissText();
+    }
+} else {
+    // If no notes in the row, count as a miss
+    combo = 0;
+    comboElement.textContent = `Combo: ${combo}`;
+    updateScore(-100);
+    showMissText();
+}
 
         const hitZone = document.querySelector(`.hit-zone[data-key="${event.key}"]`);
         if (hitZone) {
