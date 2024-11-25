@@ -161,40 +161,39 @@
         const notes = document.querySelectorAll(`.note[data-key="${keyPressed}"]`);
 
        if (notes.length > 0) {
-    let noteHit = false; // Flag to check if any note was hit
+    let noteHit = false; // Flag to check if a note was hit
 
     notes.forEach(note => {
         const noteTop = note.getBoundingClientRect().top;
         const hitZone = document.querySelector(`.hit-zone[data-key="${keyPressed}"]`);
         const hitZoneTop = hitZone.getBoundingClientRect().top;
 
+        // Check if the note is within the hit range
         if (noteTop >= hitZoneTop - 60 && noteTop <= hitZoneTop + 60) {
-            // If the note is within the hit range
-            note.remove();
-            note.classList.add('hit');
-            note.classList.add('confetti'); // Mark the note as hit
-            updateScore(100);
-            showHitText();
-            combo += 1;
-            comboElement.textContent = `Combo: ${combo}`; // Update combo
-            pingSound.play(); // Play ping sound when the note is hit
-            noteHit = true; // Note was hit successfully
+            note.remove(); // Remove the note
+            note.classList.add('hit'); // Mark it as hit
+            updateScore(100); // Add points
+            showHitText(); // Show hit feedback
+            combo += 1; // Increase combo
+            comboElement.textContent = `Combo: ${combo}`;
+            pingSound.play(); // Play the sound
+            noteHit = true; // Note was successfully hit
         }
     });
 
     if (!noteHit) {
-        // If no notes were hit in this row, count as a miss
+        // If no notes were hit in the row, it's a miss
         combo = 0;
         comboElement.textContent = `Combo: ${combo}`;
-        updateScore(-100);
-        showMissText();
+        updateScore(-100); // Deduct points
+        showMissText(); // Show miss feedback
     }
 } else {
-    // If no notes in the row, count as a miss
+    // If no notes exist for the pressed key, count it as a miss
     combo = 0;
     comboElement.textContent = `Combo: ${combo}`;
-    updateScore(-100);
-    showMissText();
+    updateScore(-100); // Deduct points
+    showMissText(); // Show miss feedback
 }
 
         const hitZone = document.querySelector(`.hit-zone[data-key="${event.key}"]`);
