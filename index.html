@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhythm Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Game Screen -->
+        <div id="note-container"></div>
+        <div id="hit-zone-container"></div>
+
+        <!-- Pause Button -->
+        <button id="pause-btn">Pause</button>
+
+        <!-- Score and Combo Displays -->
+        <div id="score">Score: 1000</div>
+        <div id="combo">Combo: 0</div>
+    </div>
+
+    <!-- Admin Panel HTML (Initially hidden) -->
+    <div id="admin-panel" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); color: white; font-size: 20px; padding: 20px;">
+        <h2>Admin Panel</h2>
+        <label for="set-score">Set Score:</label>
+        <input type="number" id="set-score" value="1000" min="0" step="1">
+        <button id="save-score">Save Score</button>
+        <button id="close-admin-panel">Close</button>
+    </div>
+
+
+        <!-- Cogwheel Button -->
+    <button id="cogwheel"><span>⚙️</span></button>
+
+    <div id="song-menu">
+        <div id="song-selection">
+            <h3>Song Selection</h3>
+            <ul id="song-list">
+                <li class="song-btn" data-path="song1.mp3">Timo</li>
+                <li class="song-btn" data-path="tetris.mp3"">Tetris Theme</li>
+                <li class="song-btn" data-path="">Song 3</li>
+            </ul>
+        </div>
+        <div class="divider"></div>
+        <div id="speed-controls">
+            <h3>Speed Control</h3>
+            <button id="speed-up" class="control-btn">Speed Up</button>
+            <button id="slow-down" class="control-btn">Slow Down</button>
+            <div>
+            </div>
+        <div class="divider"></div>
+        <div id="other-settings">
+            <h3>Other Settings</h3>
+            <!-- Additional settings can go here -->
+             <button id="secret-btn" style="display: none;">Secret Admin Panel</button>
+             <button id="wipe" class="control-btn">Reset Highest Score</button>
+            </div>
+    </div>
+
+
+
+    <script src="game.js"></script>
+</body>
+</html>

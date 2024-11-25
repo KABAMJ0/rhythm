@@ -1,0 +1,371 @@
+/* General Reset */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    overflow: hidden;
+    color: white;
+}
+
+/* Game Container */
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* Control Buttons */
+.controls {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+}
+
+.control-btn {
+    background-color: #0071E3;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.control-btn:hover {
+    background-color: #005bb5;
+    transform: scale(1.1);
+}
+
+.control-btn:active {
+    background-color: #003d7a;
+}
+
+/* Falling Notes */
+.note {
+    width: 60px;
+    height: 60px;
+    background-color: #0071E3;
+    border-radius: 50%;
+    position: absolute;
+    animation: moveDown 2s linear infinite;
+}
+
+.hit-zone {
+    width: 60px;
+    height: 60px;
+    background-color: gray;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 20px;
+    transform: translateX(0%);
+    transition: transform 0.1s ease;
+}
+
+.hit-zone::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 120px; /* Larger width */
+    height: 120px; /* Larger height */
+    border-radius: 50%;
+    background-color: transparent; /* Invisible but interactive */
+    z-index: -1; /* Keeps it behind visible elements */
+}
+
+
+/* Score and Combo Display */
+#score, #combo {
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+#score {
+    top: 10px;
+    left: 10px;
+}
+
+#combo {
+    top: 10px;
+    right: 10px;
+}
+
+/* Animation for Notes */
+@keyframes moveDown {
+    0% {
+        top: -60px;
+    }
+    100% {
+        top: 100%;
+    }
+}
+
+/* Neon Glow Effect for Hit Zones */
+.hit-zone.glowing {
+    box-shadow: 0 0 20px 5px #00ff00, 0 0 40px 10px #00ff00; /* Neon green */
+}
+
+.hit-zone[data-key="a"].glowing {
+    box-shadow: 0 0 20px 5px #ff0000, 0 0 40px 10px #ff0000; /* Red neon for 'A' */
+    transform: translateX(0%) scale(1.1);
+}
+
+.hit-zone[data-key="s"].glowing {
+    box-shadow: 0 0 20px 5px #0000ff, 0 0 40px 10px #0000ff; /* Blue neon for 'S' */
+    transform: translateX(0%) scale(1.1);
+}
+
+.hit-zone[data-key="d"].glowing {
+    box-shadow: 0 0 20px 5px #ff00ff, 0 0 40px 10px #ff00ff; /* Purple neon for 'D' */
+    transform: translateX(0%) scale(1.1);
+}
+
+.hit-zone[data-key="f"].glowing {
+    transform: translateX(0%) scale(1.1);
+    box-shadow: 0 0 20px 5px #ffff00, 0 0 40px 10px #ffff00; /* Yellow neon for 'F' */
+}
+.hit-zone.pressed {
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 0 20px 5px #00ff00, 0 0 40px 10px #00ff00; /* Glow based on active zone */
+}
+
+/* Cogwheel Button */
+#cogwheel {
+    position: absolute;
+    bottom: 20px; /* Adjust for better positioning */
+    left: 20px;   /* Adjust for better positioning */
+    width: 50px;
+    height: 50px;
+    font-size: 30px;  /* Increase font size for better visibility */
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    cursor: pointer;
+    background-color: #0071E3;
+    border-radius: 50%;  /* Make it round */
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);  /* Adding a soft shadow */
+    transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border: none;
+}
+
+/* Hover and Active Effects */
+#cogwheel:hover {
+    background-color: #005bb5;
+    transform: scale(1.1) rotate(90deg); /* Enlarge slightly and rotate 90 degrees */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Increase shadow for hover effect */
+}
+
+#cogwheel:active {
+    background-color: #003d7a;  /* Darken when clicked */
+    transform: scale(1) rotate(90deg); /* Keep the rotation when clicked */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slightly reduce shadow on click */
+}
+
+/* Make the text align center, considering rotation */
+#cogwheel span {
+    position: absolute;
+    transform: rotate(-90deg); /* Counteract rotation */
+    line-height: 0; /* Adjust line-height to prevent extra space */
+}
+
+
+
+/* Initially hide the song menu */
+#song-menu {
+    position: absolute;
+    bottom: 60px; /* Position just below the cogwheel */
+    left: 10px;
+    background-color: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    width: 220px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: none; /* Initially hidden */
+    z-index: 100;
+    font-family: Arial, sans-serif;
+}
+
+/* Show the song menu when visible */
+#song-menu.visible {
+    display: block; /* This class will display the menu */
+}
+
+/* Menu section headings */
+#song-menu h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #ddd;
+    padding: 5px 0;
+}
+
+/* Song list items */
+#song-list li {
+    margin: 5px 0;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+}
+
+#song-list li:hover {
+    background-color: #444;
+}
+
+/* Divider for separating sections */
+.divider {
+    border-top: 1px solid #444;
+    margin: 10px 0;
+}
+
+/* Speed control buttons */
+#speed-controls {
+    margin-top: 10px;
+}
+
+.control-btn {
+    background-color: #0071E3;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.control-btn:hover {
+    background-color: #005bb5;
+    transform: scale(1.05);
+}
+
+.control-btn:active {
+    background-color: #003d7a;
+}
+
+/* Additional settings container */
+#other-settings {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.note {
+    position: absolute;
+    z-index: 1; /* Place falling dots above hit zones */
+}
+
+/* Pause button in front of everything */
+#pause-btn {
+    position: absolute;
+    top: 20px;
+    z-index: 10; /* Ensure pause button is at the highest level */
+    background-color: #0071E3;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover and active effects for the pause button */
+#pause-btn:hover {
+    background-color: #005bb5;
+    transform: scale(1.1);
+}
+
+#pause-btn:active {
+    background-color: #003d7a;
+}
+/* Highest Score */
+#highest-score {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+}
+/* Confetti styles */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #ff0; /* Default color */
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.8;
+    animation: fall 2s linear forwards, drift 2s ease-in-out infinite;
+}
+
+/* Falling animation */
+@keyframes fall {
+    0% {
+        transform: translateY(-10%);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(110vh); /* Falls off the screen */
+        opacity: 0;
+    }
+}
+
+/* Horizontal drifting animation */
+@keyframes drift {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(20px);
+    }
+}
+/* Style for the "HIT" text */
+.hit-text {
+    position: absolute;
+    font-size: 48px;
+    font-weight: bold;
+    color: green; /* You can change this to any color */
+    opacity: 1;
+    pointer-events: none;
+    animation: shrinkFadeOut 2s forwards;
+}
+
+/* Style for the "HIT" text */
+.miss-text {
+    position: absolute;
+    font-size: 48px;
+    font-weight: bold;
+    color: red; /* You can change this to any color */
+    opacity: 1;
+    pointer-events: none;
+    animation: shrinkFadeOut 2s forwards;
+}
+
+/* Keyframes for shrinking and fading out */
+@keyframes shrinkFadeOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
