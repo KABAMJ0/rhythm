@@ -213,6 +213,38 @@
         }
         return "";
     }
+// Ensure the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+    // Select the Hardcore Mode checkbox
+    const hardcoreToggle = document.getElementById("hardcore-mode-toggle");
+
+    // Add an event listener for when the checkbox state changes
+    hardcoreToggle.addEventListener("change", (event) => {
+        if (event.target.checked) {
+            console.log("Hardcore Mode Activated!");
+            enableHardcoreMode();
+        } else {
+            console.log("Hardcore Mode Deactivated!");
+            disableHardcoreMode();
+        }
+    });
+});
+
+// Function to enable Hardcore Mode
+function enableHardcoreMode() {
+    // Example logic for enabling Hardcore Mode
+    document.body.style.backgroundColor = "red"; // Visual feedback
+    console.log("Hardcore Mode is now active. Adjusting game settings...");
+    // Add additional changes to increase difficulty here
+}
+
+// Function to disable Hardcore Mode
+function disableHardcoreMode() {
+    // Example logic for disabling Hardcore Mode
+    document.body.style.backgroundColor = ""; // Reset background color
+    console.log("Hardcore Mode is now inactive. Reverting game settings...");
+    // Revert any changes made by Hardcore Mode here
+}
 
     document.addEventListener('keydown', handleKeyPress);
     startGame();
