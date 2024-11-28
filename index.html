@@ -30,10 +30,7 @@
         <button id="close-admin-panel">Close</button>
     </div>
 
-
-
-
-        <!-- Cogwheel Button -->
+    <!-- Cogwheel Button -->
     <button id="cogwheel"><span>⚙️</span></button>
 
     <div id="song-menu">
@@ -41,7 +38,7 @@
             <h3>Song Selection</h3>
             <ul id="song-list">
                 <li class="song-btn" data-path="timokapper.mp3">Timo</li>
-                <li class="song-btn" data-path="tetris.mp3"">Tetris Theme</li>
+                <li class="song-btn" data-path="tetris.mp3">Tetris Theme</li>
                 <li class="song-btn" data-path="">Song 3</li>
             </ul>
         </div>
@@ -50,17 +47,22 @@
             <h3>Speed Control</h3>
             <button id="speed-up" class="control-btn">Speed Up</button>
             <button id="slow-down" class="control-btn">Slow Down</button>
-            <div>
-            </div>
+        </div>
         <div class="divider"></div>
         <div id="other-settings">
             <h3>Other Settings</h3>
-            <!-- Additional settings can go here -->
-             <button id="secret-btn" style="display: none;">Secret Admin Panel</button>
-             <button id="wipe" class="control-btn">Reset Highest Score</button>
+            <div>
+                <label>
+                    Hardcore Mode:
+                    <input type="checkbox" id="hardcore-mode-toggle">
+                </label>
             </div>
-               <h3>Made by Jurre</h3>
-           
+            <!-- Additional settings can go here -->
+            <button id="secret-btn" style="display: none;">Secret Admin Panel</button>
+            <button id="wipe" class="control-btn">Reset Highest Score</button>
+        </div>
+        <h3>Made by Jurre</h3>
+    </div>
 
     <script src="game.js"></script>
 </body>
