@@ -156,6 +156,18 @@
         });
     }
 
+    function resetGame() {
+        score = 1000;  // Reset score to 1000
+        combo = 0;     // Reset combo
+        comboElement.textContent = `Combo: ${combo}`;
+        scoreElement.textContent = `Score: ${score}`;
+        gamePaused = true; // Pause the game
+        // Reload the page to restart the game
+        setTimeout(() => {
+            location.reload(); // This reloads the page to reset everything
+        }, 2000);  // Delay before reloading to show "Game Over"
+        
+
     function handleKeyPress(event) {
         if (gamePaused || gameOver) return;
 
