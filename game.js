@@ -167,7 +167,8 @@
             location.reload(); // This reloads the page to reset everything
         }, 2000);  // Delay before reloading to show "Game Over"
         
-
+    }
+    
     function handleKeyPress(event) {
         if (gamePaused || gameOver) return;
 
