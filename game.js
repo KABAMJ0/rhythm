@@ -1,4 +1,6 @@
 (() => {
+    const secretKey = "Papapxfkfg"; // Change this to a secret string
+
     let score = 1000;  // Starting score
     let combo = 0;
     let noteSpeed = parseFloat(getCookie("noteSpeed")) || 2; // Get the saved speed from cookies (default to 2 if not set)
@@ -77,7 +79,7 @@
     document.getElementById('wipe').addEventListener('click', function () {
         score = 0;
         highestScore = 0;
-        combo = 0// Increase note speed
+        combo = 0;
         console.log('Wiped Score');
     });
 
@@ -160,41 +162,41 @@
         const keyPressed = event.key;
         const notes = document.querySelectorAll(`.note[data-key="${keyPressed}"]`);
 
-       if (notes.length > 0) {
-    let noteHit = false; // Flag to check if a note was hit
+        if (notes.length > 0) {
+            let noteHit = false; // Flag to check if a note was hit
 
-    notes.forEach(note => {
-        const noteTop = note.getBoundingClientRect().top;
-        const hitZone = document.querySelector(`.hit-zone[data-key="${keyPressed}"]`);
-        const hitZoneTop = hitZone.getBoundingClientRect().top;
+            notes.forEach(note => {
+                const noteTop = note.getBoundingClientRect().top;
+                const hitZone = document.querySelector(`.hit-zone[data-key="${keyPressed}"]`);
+                const hitZoneTop = hitZone.getBoundingClientRect().top;
 
-        // Check if the note is within the hit range
-        if (noteTop >= hitZoneTop - 60 && noteTop <= hitZoneTop + 60) {
-            note.remove(); // Remove the note
-            note.classList.add('hit'); // Mark it as hit
-            updateScore(100); // Add points
-            showHitText(); // Show hit feedback
-            combo += 1; // Increase combo
+                // Check if the note is within the hit range
+                if (noteTop >= hitZoneTop - 60 && noteTop <= hitZoneTop + 60) {
+                    note.remove(); // Remove the note
+                    note.classList.add('hit'); // Mark it as hit
+                    updateScore(100); // Add points
+                    showHitText(); // Show hit feedback
+                    combo += 1; // Increase combo
+                    comboElement.textContent = `Combo: ${combo}`;
+                    pingSound.play(); // Play the sound
+                    noteHit = true; // Note was successfully hit
+                }
+            });
+
+            if (!noteHit) {
+                // If no notes were hit in the row, it's a miss
+                combo = 0;
+                comboElement.textContent = `Combo: ${combo}`;
+                updateScore(-100); // Deduct points
+                showMissText(); // Show miss feedback
+            }
+        } else {
+            // If no notes exist for the pressed key, count it as a miss
+            combo = 0;
             comboElement.textContent = `Combo: ${combo}`;
-            pingSound.play(); // Play the sound
-            noteHit = true; // Note was successfully hit
+            updateScore(-100); // Deduct points
+            showMissText(); // Show miss feedback
         }
-    });
-
-    if (!noteHit) {
-        // If no notes were hit in the row, it's a miss
-        combo = 0;
-        comboElement.textContent = `Combo: ${combo}`;
-        updateScore(-100); // Deduct points
-        showMissText(); // Show miss feedback
-    }
-} else {
-    // If no notes exist for the pressed key, count it as a miss
-    combo = 0;
-    comboElement.textContent = `Combo: ${combo}`;
-    updateScore(-100); // Deduct points
-    showMissText(); // Show miss feedback
-}
 
         const hitZone = document.querySelector(`.hit-zone[data-key="${event.key}"]`);
         if (hitZone) {
@@ -215,68 +217,15 @@
 
         for (let i = 0; i < numPieces; i++) {
             // Create a confetti piece
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti');
+            const confettiPiece = document.createElement('div');
+            confettiPiece.classList.add('confetti');
+            confettiPiece.style.left = `${note.getBoundingClientRect().left + Math.random() * note.offsetWidth}px`;
+            confettiPiece.style.top = `${note.getBoundingClientRect().top}px`;
+            confettiPiece.style.animation = `confettiFall 2s ease-in-out forwards`;
 
-            // Randomize color
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-            // Randomize starting position
-            confetti.style.left = Math.random() * window.innerWidth + 'px';
-            confetti.style.top = (note.offsetTop || window.innerHeight / 2) + 'px'; // Start near the note or screen center
-
-            // Append to the body
-            document.body.appendChild(confetti);
-
-            // Remove confetti after animation completes
-            confetti.addEventListener('animationend', () => {
-                confetti.remove();
-            });
+            document.body.appendChild(confettiPiece);
         }
     }
-
-    function showHitText() {
-        // Create the "HIT" text element
-        const hitText = document.createElement('div');
-        hitText.textContent = "hit!";
-        hitText.classList.add('hit-text');
-
-        // Randomize position within the game window
-        const randomX = Math.random() * window.innerWidth;
-        const randomY = Math.random() * window.innerHeight;
-        hitText.style.left = `${randomX}px`;
-        hitText.style.top = `${randomY}px`;
-
-        // Append the "HIT" text to the body
-        document.body.appendChild(hitText);
-
-        // Remove the "HIT" text after animation completes
-        hitText.addEventListener('animationend', () => {
-            hitText.remove();
-        });
-    }
-  
-    function showMissText() {
-        // Create the "HIT" text element
-        const hitText = document.createElement('div');
-        hitText.textContent = "miss!";
-        hitText.classList.add('miss-text');
-
-        // Randomize position within the game window
-        const randomX = Math.random() * window.innerWidth;
-        const randomY = Math.random() * window.innerHeight;
-        hitText.style.left = `${randomX}px`;
-        hitText.style.top = `${randomY}px`;
-
-        // Append the "HIT" text to the body
-        document.body.appendChild(hitText);
-
-        // Remove the "HIT" text after animation completes
-        hitText.addEventListener('animationend', () => {
-            hitText.remove();
-        });
-    }
-
 
     function updateScore(points) {
         score += points;
@@ -284,30 +233,72 @@
         if (score > highestScore) {
             highestScore = score;
             highestScoreElement.textContent = `Highest Score: ${highestScore}`;
-            setCookie("highestScore", highestScore, 365);  // Store the highest score in cookies
+            setSecureCookie("highestScore", highestScore, 365);  // Securely store the highest score in cookies
         }
     }
 
-    function resetGame() {
-        score = 1000;  // Reset score to 1000
-        combo = 0;     // Reset combo
-        comboElement.textContent = `Combo: ${combo}`;
-        scoreElement.textContent = `Score: ${score}`;
-        gamePaused = true; // Pause the game
-        // Reload the page to restart the game
-        setTimeout(() => {
-            location.reload(); // This reloads the page to reset everything
-        }, 2000);  // Delay before reloading to show "Game Over"
+    function showHitText() {
+        const hitText = document.createElement('div');
+        hitText.classList.add('hit-text');
+        hitText.innerText = 'Hit!';
+        document.body.appendChild(hitText);
+        setTimeout(() => hitText.remove(), 500); // Remove hit text after half a second
     }
 
-    // Cookie functions
-    function setCookie(name, value, days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        const expires = "expires=" + date.toUTCString();
-        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    function showMissText() {
+        const missText = document.createElement('div');
+        missText.classList.add('miss-text');
+        missText.innerText = 'Miss!';
+        document.body.appendChild(missText);
+        setTimeout(() => missText.remove(), 500); // Remove miss text after half a second
     }
 
+    // Add event listeners for keypress and keyrelease
+    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener('keyup', handleKeyRelease);
+
+    // Start the game
+    startGame();
+
+    // SHA-256 HMAC for signing data
+    function hmacSHA256(data, key) {
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(key);
+        const dataBuffer = encoder.encode(data);
+        return window.crypto.subtle.importKey("raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"])
+            .then(key => window.crypto.subtle.sign("HMAC", key, dataBuffer))
+            .then(signature => {
+                const byteArray = new Uint8Array(signature);
+                return Array.from(byteArray).map(byte => byte.toString(16).padStart(2, '0')).join('');
+            });
+    }
+
+    // Encrypt the cookie value
+    function encryptCookieValue(value) {
+        return hmacSHA256(value, secretKey);
+    }
+
+    // Set encrypted cookie
+    function setSecureCookie(name, value, days) {
+        encryptCookieValue(value).then(encryptedValue => {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = `${name}=${encryptedValue};${expires};path=/`;
+        });
+    }
+
+    // Get and validate encrypted cookie
+    function getSecureCookie(name) {
+        const cookieValue = getCookie(name);
+        if (cookieValue) {
+            return window.crypto.subtle.verify("HMAC", secretKey, cookieValue)
+                .then(isValid => isValid ? cookieValue : null);
+        }
+        return null;
+    }
+
+    // Standard cookie getter (for non-sensitive data)
     function getCookie(name) {
         const nameEQ = name + "=";
         const ca = document.cookie.split(';');
@@ -318,8 +309,7 @@
         }
         return "";
     }
-
-    // Create hit zones
+// Create hit zones
     notePatterns.forEach(pattern => {
         const hitZone = document.createElement('div');
         hitZone.classList.add('hit-zone');
